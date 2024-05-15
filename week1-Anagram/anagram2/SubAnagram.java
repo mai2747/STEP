@@ -3,28 +3,37 @@ package SubAnagram;
 import java.io.*;
 import java.util.*;
 
-//
-// Need to change the process
-// Execution time is now 3 mins for large.txt
-//
 
 public class SubAnagram {
 
     static BufferedReader reader;
-    static char[] one = {'a', 'e', 'h', 'i', 'n', 'o', 'r', 's', 't'};
-    static char[] two = {'c', 'd', 'l', 'm', 'u'};
-    static char[] three = {'b', 'f', 'g', 'p', 'v', 'w', 'y'};
-    static char[] four = {'j', 'k', 'q', 'x', 'z'};
-    private static final Map<Character, Integer> alphabets = new HashMap<>();
-    int[] scores;
 
-    static List<String> bestAnagram = new ArrayList<>();;
-    static int highest = 0;
+    final static int[] scores = {1, 3, 2, 2, 1, 3, 3, 1, 1, 4, 4, 2, 2, 1, 1, 3, 4, 1, 1, 1, 2, 3, 3, 4, 3, 4};
+    static List<String> bestAnagram = new ArrayList<>();
+    static List<Pair> dictionary = new ArrayList<>();
 
 
-    public static void setCharGroup(char[] c, int value){
-        for(char chars: c){
-            alphabets.put(chars, value);  //Better make a list?
+    public static void countCharsInDictionary(){
+        try {
+            reader = new BufferedReader(new FileReader("words.txt"));
+        }catch (IOException e) {
+            throw new RuntimeException("Error opening file: " + e);
+        }
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                char[] chars = line.toCharArray();
+                int[] charCount = new int[26];
+
+                for (char c : chars) {
+                    charCount[c - 'a']++;
+                }
+                Pair pair = new Pair(line, charCount);
+                dictionary.add(pair);  //store word with its alphabet count
+            }
+        }catch (IOException e){
+            throw new RuntimeException("Error occurred: " + e);
         }
     }
 
@@ -39,20 +48,14 @@ public class SubAnagram {
                 writer.write(str);
                 writer.newLine();
             }
-            System.out.println("Highest score: " + highest);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static void findHiScore(String file){
-        //make a list of scores for each alphabet
-        if(alphabets.isEmpty()) {
-            setCharGroup(one, 1);
-            setCharGroup(two, 2);
-            setCharGroup(three, 3);
-            setCharGroup(four, 4);
-        }
+
+        countCharsInDictionary();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
             SubAnagram.reader = reader;
@@ -73,75 +76,63 @@ public class SubAnagram {
         String best = null;
         int hiScore = 0;
 
-        for(String anagram : anagrams){  //for each anagram from original string
+        for(String anagram : anagrams){  //for each anagram
             int sum = 0;
-            for(int i = 0; i < anagram.length(); i++){  //for each letters in an anagram
-                int score = alphabets.get(anagram.charAt(i));
-                sum += score;
+            char[] chars = anagram.toCharArray();
+
+            for(char c : chars){
+                sum += scores[c - 'a'];
             }
-            if(sum > hiScore){  //update when sum exceeds current top
+
+            if(sum > hiScore){  //update when the sum exceeds the current top
                 hiScore = sum;
                 best = anagram;
-                if(hiScore > highest) highest = hiScore;
             }
         }
         bestAnagram.add(best);
-        System.out.println(best);  //**Debug**
+        System.out.println(best + ": score..." + hiScore);  //**Debug**
     }
 
     public static List<String> findAnagram(String random){
         //store anagrams to return later
         ArrayList<String> anagramList = new ArrayList<>();
 
-        try {
-            reader = new BufferedReader(new FileReader("words.txt"));
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        String originalLine = random.toLowerCase();
+        char[] strList = originalLine.toCharArray();
 
-        String lowerCase = random.toLowerCase();
-        char[] strList = lowerCase.toCharArray();
+        int[] inputCharCount = new int[26];
 
-        int len = strList.length;
-        HashMap<Character, Integer> count = new HashMap<>();
-
-        for(char c : strList){
-            if(c > 96 && c < 123){
-                count.put(c, count.getOrDefault(c, 0) + 1);
+        for(char c : strList){  //store nums of occurrences of each alphabet
+            if(Character.isLetter(c)){
+                inputCharCount[c - 'a']++;
             }else{
-                System.out.println("Invalid character in input: " + c);
-                return anagramList;
+                throw new IllegalArgumentException("Invalid character in input: " + c);
             }
         }
 
-        //check frequency of each letter and compare
-        String line;
-        try {
-            while ((line = reader.readLine()) != null) {
-                String word = line.toLowerCase();
-                char[] chars = word.toCharArray();
+        for(Pair word : dictionary){  //loop for whole dictionary
+            boolean isAnagram = true;
 
-                if (len >= chars.length) {
-                    HashMap<Character, Integer> counter = new HashMap<>();
-                    boolean anagram = true;
-
-                    for (char c : chars) {
-                        counter.put(c, counter.getOrDefault(c, 0) + 1);
-                    }
-
-                    for(char c : counter.keySet()){
-                        if(!count.containsKey(c) || counter.get(c) > count.get(c)){
-                            anagram = false;
-                            break;
-                        }
-                    }
-                    if (anagram && !word.equals(lowerCase)) anagramList.add(word);
+            for (int i = 0; i < 26; i++){  //check if the word in dictionary can be created from chars in input
+                if (inputCharCount[i] < word.charCount[i]) {
+                    isAnagram = false;
+                    break;
                 }
             }
-        }catch (IOException e){
-            throw new RuntimeException("Error occurred: " + e);
+            if (isAnagram && !word.word.equals(originalLine)){
+                anagramList.add(word.word);
+            }
         }
+            return anagramList;
+    }
+}
 
-        return anagramList;
+class Pair{
+    String word;
+    int[] charCount;
+
+    public Pair(String word, int[] charCount){
+        this.word = word;
+        this.charCount = charCount;
     }
 }
