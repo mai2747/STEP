@@ -1,14 +1,21 @@
 package SubAnagram;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static SubAnagram.SubAnagram.countCharsInDictionary;
 import static SubAnagram.SubAnagram.findAnagram;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class SubAnagramTest {
+
+    @BeforeAll
+    public static void setup(){
+        countCharsInDictionary();
+    }
 
     @Test
     public void testThreeLetters(){
@@ -86,10 +93,10 @@ public class SubAnagramTest {
 
     @Test
     public void testInvalid(){
-        String random = "@";
-        List<String> actual = findAnagram(random);
-
-        assertTrue(actual.isEmpty(), "Answer doesn't match!!");
+        assertThrows(IllegalArgumentException.class, () -> {
+            String random = "@";
+            findAnagram(random);
+        });
     }
 
     @Test
