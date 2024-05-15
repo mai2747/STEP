@@ -98,7 +98,8 @@ public class SubAnagram {
         ArrayList<String> anagramList = new ArrayList<>();
 
         String originalLine = random.toLowerCase();
-        char[] strList = originalLine.toCharArray();
+        String deleteSpace = originalLine.replaceAll(" ", "");
+        char[] strList = deleteSpace.toCharArray();
 
         int[] inputCharCount = new int[26];
 
@@ -119,7 +120,7 @@ public class SubAnagram {
                     break;
                 }
             }
-            if (isAnagram && !word.word.equals(originalLine)){
+            if (isAnagram){
                 anagramList.add(word.word);
             }
         }

@@ -31,7 +31,7 @@ public class SubAnagramTest {
         expected.add("ta");
 
         List<String> actual = findAnagram(random);
-        assertEquals(expected, actual, "Answer doesn't match!!");
+        assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
     }
 
     @Test
@@ -41,9 +41,10 @@ public class SubAnagramTest {
         expected.add("f");
         expected.add("o");
         expected.add("of");
+        expected.add("fo");
 
         List<String> actual = findAnagram(random);
-        assertEquals(expected, actual, "Answer doesn't match!!");
+        assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
     }
 
     @Test
@@ -58,9 +59,10 @@ public class SubAnagramTest {
         expected.add("pat");
         expected.add("t");
         expected.add("ta");
+        expected.add("tap");
 
         List<String> actual = findAnagram(random);
-        assertEquals(expected, actual, "Answer doesn't match!!");
+        assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
     }
 
     @Test
@@ -72,7 +74,7 @@ public class SubAnagramTest {
         expected.add("to");
 
         List<String> actual = findAnagram(random);
-        assertEquals(actual, expected, "Answer doesn't match!!");
+        assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
     }
 
     @Test
@@ -86,9 +88,12 @@ public class SubAnagramTest {
     @Test
     public void testOneChar(){
         String random = "a";
+        List<String> expected = new ArrayList<>();
+        expected.add("a");
+
         List<String> actual = findAnagram(random);
 
-        assertTrue(actual.isEmpty(), "Answer doesn't match!!");
+        assertEquals(actual, expected, "Answer doesn't match!!");
     }
 
     @Test
