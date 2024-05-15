@@ -37,9 +37,10 @@ public class Anagram {
         //store anagrams to print later
         ArrayList<String> anagramList = new ArrayList<>();
 
-        //convert to lower case string
+        //convert to lower case string without spacing
         String originalLine = random.toLowerCase();
-        char[] strList = originalLine.toCharArray();
+        String deleteSpace = originalLine.replaceAll(" ", "");
+        char[] strList = deleteSpace.toCharArray();
         for(char c : strList){  //check if the input only contains alphabets
             if(!Character.isLetter(c)){
                 throw new IllegalArgumentException("Invalid character: " + c);
@@ -60,14 +61,12 @@ public class Anagram {
                 //add all words with the same sortedWord
                 int pointer = mid;  //search towards left
                 while(pointer >= 0 && dictionary.get(pointer).sorted.equals(wordToFind)){
-                    String word = dictionary.get(pointer).word;
-                    if(!word.equals(originalLine)) anagramList.add(word);
+                    anagramList.add(dictionary.get(pointer).word);
                     pointer--;
                 }
                 pointer = mid + 1;  //search towards right
                 while(pointer < dictionary.size() && dictionary.get(pointer).sorted.equals(wordToFind)){
-                    String word = dictionary.get(pointer).word;
-                    if(!word.equals(originalLine)) anagramList.add(word);
+                    anagramList.add(dictionary.get(pointer).word);
                     pointer++;
                 }
                 break;

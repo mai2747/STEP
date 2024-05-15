@@ -47,6 +47,7 @@ public class AnagramTest {
         expected.add("crate");
         expected.add("react");
         expected.add("recta");
+        expected.add("trace");
 
         List<String> actual = findAnagram(random);
         assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
@@ -58,6 +59,7 @@ public class AnagramTest {
         List<String> expected = new ArrayList<>();
         expected.add("apt");
         expected.add("pat");
+        expected.add("tap");
 
         List<String> actual = findAnagram(random);
         assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
@@ -84,25 +86,32 @@ public class AnagramTest {
     @Test
     public void testOneChar(){
         String random = "a";
+        List<String> expected = new ArrayList<>();
+        expected.add("a");
+
         List<String> actual = findAnagram(random);
 
-        assertTrue(actual.isEmpty(), "Answer doesn't match!!");
+        assertEquals(actual, expected, "Answer doesn't match!!");
     }
 
     @Test
     public void textInvalid(){
         assertThrows(IllegalArgumentException.class, () -> {
-            String random = "@";
+            String random = "ab@de";
             findAnagram(random);
         });
     }
 
     @Test
-    public void textInvalid2(){
-        assertThrows(IllegalArgumentException.class, () -> {
-            String random = "top up";
-            findAnagram(random);
-        });
+    public void textSpace(){
+        String random = "to p";
+        List<String> expected = new ArrayList<>();
+        expected.add("top");
+        expected.add("pot");
+        expected.add("opt");
+
+        List<String> actual = findAnagram(random);
+        assertTrue(expected.containsAll(actual) && actual.containsAll(expected), "Answer doesn't match!!");
     }
 
     @Test
