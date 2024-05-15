@@ -1,14 +1,12 @@
 import FullAnagram.Anagram;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static FullAnagram.Anagram.findAnagram;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class AnagramTest {
@@ -93,18 +91,18 @@ public class AnagramTest {
 
     @Test
     public void textInvalid(){
-        String random = "@";
-        List<String> actual = findAnagram(random);
-
-        assertTrue(actual.isEmpty(), "Answer doesn't match!!");
+        assertThrows(IllegalArgumentException.class, () -> {
+            String random = "@";
+            findAnagram(random);
+        });
     }
 
     @Test
     public void textInvalid2(){
-        String random = "top up";
-        List<String> actual = findAnagram(random);
-
-        assertTrue(actual.isEmpty(), "Answer doesn't match!!");
+        assertThrows(IllegalArgumentException.class, () -> {
+            String random = "top up";
+            findAnagram(random);
+        });
     }
 
     @Test
