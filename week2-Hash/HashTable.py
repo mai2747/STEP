@@ -15,11 +15,11 @@ import random, sys, time
 # Return value: a hash value
 def calculate_hash(key):
     assert type(key) == str
-    # Note: This is not a good hash function. Do you see why?
     hash = 0
-    count = 1  # For avoiding hash duplication between anagrams
-    for idx, i in enumerate(key):
-        hash += (ord(i) * count) << idx
+    count = 0  # multiply 11^(index-1) to avoid hash duplication between anagrams
+
+    for i in key:
+        hash += ord(i) * 11**count
         count += 1
     return hash
 
