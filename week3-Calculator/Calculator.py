@@ -74,21 +74,28 @@ def detect_bracket(line, index):
 
 def evaluate_mul_div(tokens):
     tokens.insert(0, {'type': 'PLUS'})  # Insert a dummy '+' token
+    new_tokens = []
     index = 1
+    new_index = 1
     while index < len(tokens):
         if tokens[index]['type'] == 'NUMBER':
             if tokens[index - 1]['type'] == 'TIMES':
-                tokens[index - 2]['number'] *= tokens[index]['number']
-                del tokens[index-1]
-                del tokens[index-1]
+                new_tokens[new_index - 1]['number'] *= tokens[index]['number']
+
             elif tokens[index - 1]['type'] == 'DIVIDE':
                 if tokens[index]['number'] == 0:
                     print('Invalid calculation: cannot be divided by 0')
                     exit(1)
-                tokens[index - 2]['number'] /= tokens[index]['number']
-                del tokens[index - 1]
-                del tokens[index - 1]
+                 new_tokens[new_index - 1]['number'] /= tokens[index]['number']
+
+            else
+                new_tokens[new_index]['type'] = tokens[index]['type']  // operator
+                new_index += 1
+                new_tokens[new_index]['type'] = tokens[index]['type']  // operand
+                new_tokens[new_index]['number'] = tokens[index]['number'] // ?
         index += 1
+        new_index += 1
+    
 
     return tokens
 
