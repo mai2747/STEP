@@ -97,7 +97,7 @@ def evaluate_mul_div(tokens):
         new_index += 1
     
 
-    return tokens
+    return new_tokens
 
 def evaluate(tokens):
     answer = 0
