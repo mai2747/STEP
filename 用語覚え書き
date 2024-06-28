@@ -4,3 +4,6 @@ Linked list -- 連結リスト有向
 Doubly linked list -- 双方向連結リスト
 Directed graph -- 有向グラフ
 cycle -- 閉路
+minimun spanning tree -- 最小全域木
+simulated annealing -- 焼きなまし法
+K-Means Clustering
