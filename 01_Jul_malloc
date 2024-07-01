@@ -78,9 +78,32 @@ void *my_malloc(size_t size) {
   my_metadata_t *metadata = my_heap.free_head;
   my_metadata_t *prev = NULL;
   // First-fit: Find the first free slot the object fits.
-  
+  // TODO: Update this logic to Best-fit!　-> 最適なメモリを渡すように変更する。
+  // すべての空きメモリを確認していき、必要サイズ以上であるうちの最小を見つけ出して譲渡。
 
-  //metadata を bestfit に変更？
+  //最適メモリが見つかるたびに更新するためのポインター(仮置き)、prevを流用できる？
+  my_metadata_t *bestfit = NULL;
+  my_metadata_t *bestfit_prev = NULL;
+  size_t min_diff = SIZE_MAX;
+
+  while(metadata){
+    // Find the smallest metadata within metadata larger than the requested size
+    if(metadata->size >= size){
+        size_t current_diff = metadata->size - size;
+        if(current_diff < min_diff){  //Found a better fit
+          bestfit = metadata;
+          bestfit_prev = prev;
+          min_diff = current_diff;
+          }
+    }
+    prev = metadata;
+    metadata = metadata->next;
+  }
+
+  // Update metadata to the best fit value
+  metadata = bestfit;
+  prev = bestfit_prev;
+
   if (!metadata) {
     // There was no free slot available. We need to request a new memory region
     // from the system by calling mmap_from_system().
