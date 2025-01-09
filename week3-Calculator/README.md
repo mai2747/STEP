@@ -8,7 +8,14 @@
 入力された式の中に括弧を見つけた時点から再帰的に計算するように設計した。\
 括弧で囲まれた式を先に計算し、答えをひとつのNUMBERトークンにまとめてtokeniseをするようにしている。二重、三重となっている場合は一番奥の括弧がはじめに計算される。その計算により取得されたNUMBERトークンを利用して一つ外の括弧、そしてまた次の括弧への計算につなげられる。
 
-## 木構造利用
-工事中
+---
+---
 
-(20/06: 修正前のファイルが行方不明になったため再度gitに追加)
+## Handling multiplication and division
+&emsp; Based on the existing evaluate method, I created `evaluate_mul_div` to handle the '*' and '/' operators.\
+In this method, the multiplication (TIMES) and division (DIVIDE) operators in the tokenised data are processed, calculating the products and quotients, and storing them as NUMBER tokens back into the token list. By incorporating this method into the calculation process before the main computation in the evaluate method, the precedence of these operations in actual calculations is replicated.\
+&emsp; Additionally, when attempting to divide by zero (i.e., encountering "/ 0"), the program terminates with an error code at that point. However, this prevents subsequent tests from being run, and I wonder if this behavior is acceptable.
+
+## Handling multiplication and division
+&emsp; The design ensures that, when parentheses are detected in the input expression, the calculation is done recursively. 
+Expressions within parentheses are evaluated first, and the result is converted into a single NUMBER token, which is then tokenised. In the case of nested parentheses (double, triple, etc.), the innermost parentheses are calculated first. The result of this calculation, a NUMBER token, is then used to continue the calculation in the next outer parentheses, and so on.
