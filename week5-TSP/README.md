@@ -13,3 +13,23 @@
 各ノードから到達し得るノードと距離を記録する二次元配列(距離リスト)と、Nodeクラスの連結リストの代わりとなる一次元の配列を利用した貪欲法。\
 先ほど複数のメソッドを介して交点の有無を計算していたところを、二つのエッジを繋ぎなおした際の距離と現在の距離をリストから計算し、短くなるようだったらその繋ぎなおしを採用するようにしている。\
 ここまではいいけれど、繋ぎなおしによる順序の変更方法がまだ
+
+---
+---
+
+## Travelling Salesman Problem
+> I tried to write code to find the shortest distance using a greedy algorithm, but it is currently in a state where it cannot be executed.（It is in the process of being rewrited ti the code without using the Node class, so there are multiple methods with similar functionality.）Since the code itself is not in a proper state, I will describe my attempts here and the system I aim to complete in the future.
+### Greedy algorithm with Node class
+```Methods: greedyAlgoSearch(), removeIntersection(), fixPath(), doIntersect(), onSegment(), orientation()```
+
+&ensp; I tried to create a Node class that holds four pieces of information: the current node number (town number), the next node number, the next node, and the distance to the next node, and attempted to give it the role of a linked list. With this, I tried to make it possible to reorder the route after running 2-opt, but since it also need to keep the information of the previous node for the reordering, a modification is necessary.\
+&ensp; Also, since I was told that the distance to the next node (edge) is not required, I plan to delete it.
+1. Using the greedy algorithm, in `greedyAlgoSearch()`, it selects the shortest distance extending from node 0, then select the shortest distance from the next node, and continue until returning to node 0, at which point the process ends.
+2. It checks whether the current path has intersections with `removeIntersection()`. If intersections exist, it attempts to re-connect the path using `fixPath()` to move closer to an optimal solution.
+
+### Greedy algorithm with distance[][]
+```Methods: firstShortestPath(), modifyPath()```
+
+&ensp; A greedy algorithm using a 2D array (distance list) to record the reachable nodes and their distances from each node, and a 1D array as a replacement for the linked list of the Node class.\
+&ensp; Where it was previously calculating the presence of intersections through multiple methods, now it calculates the distance when reconnecting two edges and compare it with the current distance from the list. If the new distance is shorter, it would adopt the reconnected path.
+(So far, this is fine, but the method for changing the order due to the reconnection is still missing.)
